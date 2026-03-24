@@ -3,7 +3,7 @@
   <div class="page-header">
     <div class="container-fluid">
       <div class="pull-right">
-        <button type="submit" form="form-shipping" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <button type="submit" form="form-cds-settings" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
         <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
       </div>
       <h1>{{ heading_title }}</h1>
@@ -36,7 +36,7 @@
         </ul>
         <div class="tab-content">
           <div class="tab-pane active" id="tab-general">
-            <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-shipping" class="form-horizontal">
+            <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-cds-settings" class="form-horizontal">
               <div class="form-group">
                 <label class="col-sm-2 control-label" for="input-cost">{{ entry_cost }}</label>
                 <div class="col-sm-10">
@@ -98,64 +98,7 @@
 
           <div class="tab-pane" id="tab-methods">
             <p class="help-block">{{ help_methods }}</p>
-            {% if edit_method_id %}
-            <form action="{{ action }}" method="post" class="form-horizontal well">
-              <input type="hidden" name="action" value="edit_method" />
-              <input type="hidden" name="method_id" value="{{ edit_method_id }}" />
-              <div class="form-group">
-                <label class="col-sm-2 control-label">{{ entry_method_name }}</label>
-                <div class="col-sm-10">
-                  <input type="text" name="method_name" value="{{ edit_method_name }}" class="form-control" required />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">{{ entry_method_code }}</label>
-                <div class="col-sm-10">
-                  <input type="text" name="method_code" value="{{ edit_method_code }}" class="form-control" required />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">{{ entry_method_api_id }}</label>
-                <div class="col-sm-10">
-                  <input type="text" name="method_api_id" value="{{ edit_method_api_id }}" class="form-control" />
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-primary">{{ button_update_method }}</button>
-                  <a href="{{ action }}" class="btn btn-default">{{ button_cancel }}</a>
-                </div>
-              </div>
-            </form>
-            {% else %}
-            <form action="{{ action }}" method="post" class="form-horizontal well">
-              <input type="hidden" name="action" value="add_method" />
-              <div class="form-group">
-                <label class="col-sm-2 control-label">{{ entry_method_name }}</label>
-                <div class="col-sm-10">
-                  <input type="text" name="method_name" value="" class="form-control" required />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">{{ entry_method_code }}</label>
-                <div class="col-sm-10">
-                  <input type="text" name="method_code" value="" class="form-control" required />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">{{ entry_method_api_id }}</label>
-                <div class="col-sm-10">
-                  <input type="text" name="method_api_id" value="" class="form-control" />
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-primary">{{ button_add_method }}</button>
-                </div>
-              </div>
-            </form>
-            {% endif %}
-
+            <p class="text-muted">{{ text_view_only }}</p>
             <div class="table-responsive">
               <table class="table table-bordered table-hover">
                 <thead>
@@ -164,7 +107,6 @@
                     <td class="text-left">{{ column_name }}</td>
                     <td class="text-left">{{ column_code }}</td>
                     <td class="text-left">{{ column_api_id }}</td>
-                    <td class="text-right">{{ column_action }}</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -175,19 +117,11 @@
                     <td class="text-left">{{ m.name }}</td>
                     <td class="text-left">{{ m.code }}</td>
                     <td class="text-left">{{ m.api_id }}</td>
-                    <td class="text-right">
-                      <a href="{{ action }}&edit_method={{ m.method_id }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
-                      <form action="{{ action }}" method="post" style="display:inline-block" onsubmit="return confirm('{{ text_confirm_delete }}');">
-                        <input type="hidden" name="action" value="delete_method" />
-                        <input type="hidden" name="method_id" value="{{ m.method_id }}" />
-                        <button type="submit" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
-                      </form>
-                    </td>
                   </tr>
                   {% endfor %}
                   {% else %}
                   <tr>
-                    <td class="text-center" colspan="5">{{ text_no_methods }}</td>
+                    <td class="text-center" colspan="4">{{ text_no_methods }}</td>
                   </tr>
                   {% endif %}
                 </tbody>
@@ -197,38 +131,13 @@
 
           <div class="tab-pane" id="tab-bindings">
             <p class="help-block">{{ help_bindings }}</p>
-            <form method="get" action="{{ filter_action }}" class="form-inline well" style="margin-bottom:15px;">
+            <p class="text-muted">{{ text_view_only }}</p>
+            <form method="get" action="{{ filter_action }}" id="form-cds-filter" class="form-inline well" style="margin-bottom:15px;">
               <div class="form-group">
-                <input type="text" name="filter_search" value="{{ filter_search }}" placeholder="{{ entry_search }}" class="form-control" style="min-width:280px;" />
+                <label class="sr-only" for="input-filter-search">{{ entry_search }}</label>
+                <input type="text" name="filter_search" value="{{ filter_search }}" placeholder="{{ entry_search }}" id="input-filter-search" class="form-control" style="min-width:280px;" />
               </div>
               <button type="submit" class="btn btn-primary">{{ button_filter }}</button>
-            </form>
-
-            <form action="{{ action_bindings }}" method="post" class="form-horizontal well">
-              <input type="hidden" name="action" value="add_binding" />
-              <div class="form-group">
-                <label class="col-sm-2 control-label">{{ entry_customer }}</label>
-                <div class="col-sm-10">
-                  <input type="text" name="customer" value="" placeholder="{{ entry_customer }}" id="input-customer" class="form-control" />
-                  <input type="hidden" name="customer_id" id="input-customer-id" value="" />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">{{ entry_bind_method }}</label>
-                <div class="col-sm-10">
-                  <select name="bind_method_id" class="form-control">
-                    <option value="0">---</option>
-                    {% for m in methods %}
-                    <option value="{{ m.method_id }}">{{ m.name }} ({{ m.code }})</option>
-                    {% endfor %}
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-primary">{{ button_add_binding }}</button>
-                </div>
-              </div>
             </form>
 
             <div class="table-responsive">
@@ -241,7 +150,6 @@
                     <td class="text-left">{{ column_method }}</td>
                     <td class="text-left">{{ column_code }}</td>
                     <td class="text-left">{{ column_api_id }}</td>
-                    <td class="text-right">{{ column_action }}</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -254,18 +162,11 @@
                     <td class="text-left">{{ b.method_name }}</td>
                     <td class="text-left">{{ b.method_code }}</td>
                     <td class="text-left">{{ b.api_id }}</td>
-                    <td class="text-right">
-                      <form action="{{ action_bindings }}" method="post" style="display:inline-block" onsubmit="return confirm('{{ text_confirm_delete }}');">
-                        <input type="hidden" name="action" value="delete_binding" />
-                        <input type="hidden" name="bind_id" value="{{ b.bind_id }}" />
-                        <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
-                      </form>
-                    </td>
                   </tr>
                   {% endfor %}
                   {% else %}
                   <tr>
-                    <td class="text-center" colspan="7">{{ text_no_bindings }}</td>
+                    <td class="text-center" colspan="6">{{ text_no_bindings }}</td>
                   </tr>
                   {% endif %}
                 </tbody>
@@ -281,24 +182,4 @@
     </div>
   </div>
 </div>
-<script type="text/javascript"><!--
-$('#input-customer').autocomplete({
-  'source': function(request, response) {
-    $.ajax({
-      url: 'index.php?route=customer/customer/autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
-      dataType: 'json',
-      success: function(json) {
-        response($.map(json, function(item) {
-          return { label: item['name'], value: item['customer_id'] }
-        }));
-      }
-    });
-  },
-  'select': function(item) {
-    $('#input-customer').val(item['label']);
-    $('#input-customer-id').val(item['value']);
-    return false;
-  }
-});
-//--></script>
 {{ footer }}

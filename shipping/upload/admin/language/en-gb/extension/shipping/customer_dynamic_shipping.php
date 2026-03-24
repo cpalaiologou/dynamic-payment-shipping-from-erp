@@ -11,6 +11,7 @@ $_['text_none']        = 'None';
 $_['text_home']        = 'Home';
 $_['text_no_methods']  = 'No shipping profiles yet.';
 $_['text_no_bindings'] = 'No customer links yet.';
+$_['text_view_only']   = 'These lists are read-only. Profiles and links are maintained outside this screen (e.g. ERP / import).';
 $_['text_confirm_delete'] = 'Delete this record?';
 $_['text_pagination']  = 'Showing %d to %d of %d (%d Pages)';
 
