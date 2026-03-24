@@ -70,7 +70,6 @@ class ControllerExtensionPaymentCustomerDynamicPayment extends Controller {
 
 		$data['user_token'] = $this->session->data['user_token'];
 		$data['action'] = $this->url->link('extension/payment/customer_dynamic_payment', 'user_token=' . $this->session->data['user_token'], true);
-		$data['filter_action'] = $data['action'];
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true);
 
 		if (isset($this->error['warning'])) {

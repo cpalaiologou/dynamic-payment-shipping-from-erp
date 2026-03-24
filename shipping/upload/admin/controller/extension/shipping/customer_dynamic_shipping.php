@@ -69,7 +69,6 @@ class ControllerExtensionShippingCustomerDynamicShipping extends Controller {
 
 		$data['user_token'] = $this->session->data['user_token'];
 		$data['action'] = $this->url->link('extension/shipping/customer_dynamic_shipping', 'user_token=' . $this->session->data['user_token'], true);
-		$data['filter_action'] = $data['action'];
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=shipping', true);
 
 		if (isset($this->error['warning'])) {

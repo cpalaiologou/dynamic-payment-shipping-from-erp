@@ -15,7 +15,7 @@ Two independent extensions for **OpenCart 3.x** that expose **per-customer** shi
 
 Each top-level folder is a **standalone** package: you can ship or install only shipping, only payment, or both.
 
-Optional `install.xml` files (when present) are lightweight OCMOD metadata only — **no core file overrides** are required for these extensions.
+- `shipping/install.xml` (if present) — optional OCMOD metadata only.
 
 ---
 
@@ -24,8 +24,8 @@ Optional `install.xml` files (when present) are lightweight OCMOD metadata only 
 ### Shared (both modules)
 
 - **Profiles** — `method_id`, display name, internal `code`, `api_id` (for ERP / external APIs).
-- **Bindings** — many-to-many: one customer ↔ many profiles; one profile ↔ many customers.
-- **Admin UI** — tabs: *Settings*, *Profiles*, *Customer links*; search on bindings (name, email, profile, code, API ID); pagination on bindings.
+- **Bindings** — link customers to profiles (DB allows many links; **payment** checkout uses **one** profile per customer — first by name; shipping can still show multiple bound profiles).
+- **Admin UI** — one scrollable page: *Settings*, *Profiles*, *Customer links*; search on bindings; pagination on bindings.
 - **Languages** — `en-gb` and `el-gr` (admin + catalog where applicable).
 
 ### Shipping (`customer_dynamic_shipping`)
@@ -37,8 +37,8 @@ Optional `install.xml` files (when present) are lightweight OCMOD metadata only 
 
 ### Payment (`customer_dynamic_payment`)
 
-- OpenCart normally shows **one** row per payment extension; this module adds **extra payment rows per profile** via a registered **event** on `catalog/model/checkout/payment_method/getMethods/after` → `extension/payment/customer_dynamic_payment/augment`.
-- Checkout codes look like: `customer_dynamic_payment.m{method_id}`.
+- Everything runs in **`getMethod($address, $total)`**: extension enabled, logged-in customer, geo zone, cart min/max, then loads **one** bound profile (`ORDER BY name ASC LIMIT 1`) and returns the standard payment array. No events, no OCMOD, no session merge.
+- Session / form `code` is **`customer_dynamic_payment`** (same as the extension key) so checkout `save()` validation `isset($session['payment_methods'][$_POST['payment_method']])` passes when the theme posts `payment_method.code`. Profile id / ERP fields are extra keys on the same array: `cdp_method_id`, `cdp_erp_code`, `cdp_api_id` (available in `session->data['payment_method']` after the customer chooses this method).
 - Settings: minimum / maximum **order total** (0 = no limit), geo zone, status, sort order.
 - **Logged-in customers only** (same idea as shipping).
 
@@ -68,7 +68,7 @@ Do **not** nest an extra `upload` folder inside the store; the folders inside `u
 1. **Extensions → Extensions → Shipping** — install **Customer Dynamic Shipping** (code `customer_dynamic_shipping`), then open it and configure.
 2. **Extensions → Extensions → Payment** — install **Customer Dynamic Payment** (code `customer_dynamic_payment`), then open it and configure.
 
-Installing creates database tables and default settings. The **payment** module also registers the **event** in `oc_event` (OpenCart’s event table).
+Installing creates database tables and default settings. Re-installing **payment** removes any old `customer_dynamic_payment` row from **Extensions → Events** (leftover from earlier versions).
 
 ### 3. User group permissions
 
@@ -114,8 +114,8 @@ If you use OCMOD elsewhere, after any XML changes run **Extensions → Modificat
 
 ## Technical notes
 
-- **Order data** — the stored shipping/payment `code` includes the profile suffix (`m{id}`). Resolve full profile metadata (including `api_id`) in admin or via a small custom query joining `{prefix}customer_dynamic_*_method`.
-- **Payment event** — if payment options do not appear, confirm the event exists in **Admin → Extensions → Events** (code `customer_dynamic_payment`) and that the trigger matches your OpenCart build (`catalog/model/checkout/payment_method/getMethods/after` on standard 3.x).
+- **Order data** — **shipping** uses codes like `customer_dynamic_shipping.m{id}`. **Payment** stores `payment_code` as `customer_dynamic_payment`; use `session['payment_method']['cdp_method_id']` / `cdp_erp_code` / `cdp_api_id` on the chosen method (if your order flow copies the full `payment_method` array), or resolve from `customer_id` + bind table.
+- **Payment at checkout** — only **`catalog/model/.../customer_dynamic_payment.php` → `getMethod()`** is involved; no extra hooks.
 - **Older OpenCart 3.0.0** — if `deleteEventByCode` / event APIs differ, you may need a minor adjustment in the payment model `install()` / `uninstall()` methods.
 
 ---

@@ -21,7 +21,6 @@ class ModelExtensionPaymentCustomerDynamicPayment extends Model {
 
 		$this->load->model('setting/event');
 		$this->model_setting_event->deleteEventByCode('customer_dynamic_payment');
-		$this->model_setting_event->addEvent('customer_dynamic_payment', 'catalog/model/checkout/payment_method/getMethods/after', 'extension/payment/customer_dynamic_payment/augment', 1, 0);
 	}
 
 	public function uninstall() {

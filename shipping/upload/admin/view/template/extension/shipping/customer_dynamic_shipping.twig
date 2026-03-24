@@ -27,156 +27,155 @@
     {% endif %}
 
     <div class="panel panel-default">
-      <div class="panel-heading"><h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3></div>
+      <div class="panel-heading"><h3 class="panel-title"><i class="fa fa-cog"></i> {{ tab_general }}</h3></div>
       <div class="panel-body">
-        <ul class="nav nav-tabs">
-          <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
-          <li><a href="#tab-methods" data-toggle="tab">{{ tab_methods }}</a></li>
-          <li><a href="#tab-bindings" data-toggle="tab">{{ tab_bindings }}</a></li>
-        </ul>
-        <div class="tab-content">
-          <div class="tab-pane active" id="tab-general">
-            <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-cds-settings" class="form-horizontal">
-              <div class="form-group">
-                <label class="col-sm-2 control-label" for="input-cost">{{ entry_cost }}</label>
-                <div class="col-sm-10">
-                  <input type="text" name="shipping_customer_dynamic_shipping_cost" value="{{ shipping_customer_dynamic_shipping_cost }}" placeholder="{{ entry_cost }}" id="input-cost" class="form-control" />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label" for="input-tax">{{ entry_tax }}</label>
-                <div class="col-sm-10">
-                  <select name="shipping_customer_dynamic_shipping_tax_class_id" id="input-tax" class="form-control">
-                    <option value="0">{{ text_none }}</option>
-                    {% for tax_class in tax_classes %}
-                    {% if tax_class.tax_class_id == shipping_customer_dynamic_shipping_tax_class_id %}
-                    <option value="{{ tax_class.tax_class_id }}" selected="selected">{{ tax_class.title }}</option>
-                    {% else %}
-                    <option value="{{ tax_class.tax_class_id }}">{{ tax_class.title }}</option>
-                    {% endif %}
-                    {% endfor %}
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label" for="input-geo-zone">{{ entry_geo_zone }}</label>
-                <div class="col-sm-10">
-                  <select name="shipping_customer_dynamic_shipping_geo_zone_id" id="input-geo-zone" class="form-control">
-                    <option value="0">{{ text_all_zones }}</option>
-                    {% for geo_zone in geo_zones %}
-                    {% if geo_zone.geo_zone_id == shipping_customer_dynamic_shipping_geo_zone_id %}
-                    <option value="{{ geo_zone.geo_zone_id }}" selected="selected">{{ geo_zone.name }}</option>
-                    {% else %}
-                    <option value="{{ geo_zone.geo_zone_id }}">{{ geo_zone.name }}</option>
-                    {% endif %}
-                    {% endfor %}
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
-                <div class="col-sm-10">
-                  <select name="shipping_customer_dynamic_shipping_status" id="input-status" class="form-control">
-                    {% if shipping_customer_dynamic_shipping_status %}
-                    <option value="1" selected="selected">{{ text_enabled }}</option>
-                    <option value="0">{{ text_disabled }}</option>
-                    {% else %}
-                    <option value="1">{{ text_enabled }}</option>
-                    <option value="0" selected="selected">{{ text_disabled }}</option>
-                    {% endif %}
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>
-                <div class="col-sm-10">
-                  <input type="text" name="shipping_customer_dynamic_shipping_sort_order" value="{{ shipping_customer_dynamic_shipping_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control" />
-                </div>
-              </div>
-            </form>
-          </div>
-
-          <div class="tab-pane" id="tab-methods">
-            <p class="help-block">{{ help_methods }}</p>
-            <p class="text-muted">{{ text_view_only }}</p>
-            <div class="table-responsive">
-              <table class="table table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <td class="text-left">{{ column_method_id }}</td>
-                    <td class="text-left">{{ column_name }}</td>
-                    <td class="text-left">{{ column_code }}</td>
-                    <td class="text-left">{{ column_api_id }}</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% if methods %}
-                  {% for m in methods %}
-                  <tr>
-                    <td class="text-left">{{ m.method_id }}</td>
-                    <td class="text-left">{{ m.name }}</td>
-                    <td class="text-left">{{ m.code }}</td>
-                    <td class="text-left">{{ m.api_id }}</td>
-                  </tr>
-                  {% endfor %}
-                  {% else %}
-                  <tr>
-                    <td class="text-center" colspan="4">{{ text_no_methods }}</td>
-                  </tr>
-                  {% endif %}
-                </tbody>
-              </table>
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-cds-settings" class="form-horizontal">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-cost">{{ entry_cost }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_customer_dynamic_shipping_cost" value="{{ shipping_customer_dynamic_shipping_cost }}" placeholder="{{ entry_cost }}" id="input-cost" class="form-control" />
             </div>
           </div>
-
-          <div class="tab-pane" id="tab-bindings">
-            <p class="help-block">{{ help_bindings }}</p>
-            <p class="text-muted">{{ text_view_only }}</p>
-            <form method="get" action="{{ filter_action }}" id="form-cds-filter" class="form-inline well" style="margin-bottom:15px;">
-              <div class="form-group">
-                <label class="sr-only" for="input-filter-search">{{ entry_search }}</label>
-                <input type="text" name="filter_search" value="{{ filter_search }}" placeholder="{{ entry_search }}" id="input-filter-search" class="form-control" style="min-width:280px;" />
-              </div>
-              <button type="submit" class="btn btn-primary">{{ button_filter }}</button>
-            </form>
-
-            <div class="table-responsive">
-              <table class="table table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <td class="text-left">{{ column_bind_id }}</td>
-                    <td class="text-left">{{ column_customer }}</td>
-                    <td class="text-left">{{ column_email }}</td>
-                    <td class="text-left">{{ column_method }}</td>
-                    <td class="text-left">{{ column_code }}</td>
-                    <td class="text-left">{{ column_api_id }}</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% if bindings %}
-                  {% for b in bindings %}
-                  <tr>
-                    <td class="text-left">{{ b.bind_id }}</td>
-                    <td class="text-left">{{ b.firstname }} {{ b.lastname }}</td>
-                    <td class="text-left">{{ b.email }}</td>
-                    <td class="text-left">{{ b.method_name }}</td>
-                    <td class="text-left">{{ b.method_code }}</td>
-                    <td class="text-left">{{ b.api_id }}</td>
-                  </tr>
-                  {% endfor %}
-                  {% else %}
-                  <tr>
-                    <td class="text-center" colspan="6">{{ text_no_bindings }}</td>
-                  </tr>
-                  {% endif %}
-                </tbody>
-              </table>
-            </div>
-            <div class="row">
-              <div class="col-sm-6 text-left">{{ pagination }}</div>
-              <div class="col-sm-6 text-right">{{ results }}</div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-tax">{{ entry_tax }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_customer_dynamic_shipping_tax_class_id" id="input-tax" class="form-control">
+                <option value="0">{{ text_none }}</option>
+                {% for tax_class in tax_classes %}
+                {% if tax_class.tax_class_id == shipping_customer_dynamic_shipping_tax_class_id %}
+                <option value="{{ tax_class.tax_class_id }}" selected="selected">{{ tax_class.title }}</option>
+                {% else %}
+                <option value="{{ tax_class.tax_class_id }}">{{ tax_class.title }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
             </div>
           </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-geo-zone">{{ entry_geo_zone }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_customer_dynamic_shipping_geo_zone_id" id="input-geo-zone" class="form-control">
+                <option value="0">{{ text_all_zones }}</option>
+                {% for geo_zone in geo_zones %}
+                {% if geo_zone.geo_zone_id == shipping_customer_dynamic_shipping_geo_zone_id %}
+                <option value="{{ geo_zone.geo_zone_id }}" selected="selected">{{ geo_zone.name }}</option>
+                {% else %}
+                <option value="{{ geo_zone.geo_zone_id }}">{{ geo_zone.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_customer_dynamic_shipping_status" id="input-status" class="form-control">
+                {% if shipping_customer_dynamic_shipping_status %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_customer_dynamic_shipping_sort_order" value="{{ shipping_customer_dynamic_shipping_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading"><h3 class="panel-title"><i class="fa fa-list"></i> {{ tab_methods }}</h3></div>
+      <div class="panel-body">
+        <p class="help-block">{{ help_methods }}</p>
+        <p class="text-muted">{{ text_view_only }}</p>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <td class="text-left">{{ column_method_id }}</td>
+                <td class="text-left">{{ column_name }}</td>
+                <td class="text-left">{{ column_code }}</td>
+                <td class="text-left">{{ column_api_id }}</td>
+              </tr>
+            </thead>
+            <tbody>
+              {% if methods %}
+              {% for m in methods %}
+              <tr>
+                <td class="text-left">{{ m.method_id }}</td>
+                <td class="text-left">{{ m.name }}</td>
+                <td class="text-left">{{ m.code }}</td>
+                <td class="text-left">{{ m.api_id }}</td>
+              </tr>
+              {% endfor %}
+              {% else %}
+              <tr>
+                <td class="text-center" colspan="4">{{ text_no_methods }}</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading"><h3 class="panel-title"><i class="fa fa-link"></i> {{ tab_bindings }}</h3></div>
+      <div class="panel-body">
+        <p class="help-block">{{ help_bindings }}</p>
+        <p class="text-muted">{{ text_view_only }}</p>
+        <form method="get" id="form-cds-filter" class="form-inline well" style="margin-bottom:15px;">
+          <input type="hidden" name="route" value="extension/shipping/customer_dynamic_shipping"/>
+          <input type="hidden" name="user_token" value="{{ user_token }}"/>
+          <div class="form-group">
+            <label class="sr-only" for="input-filter-search">{{ entry_search }}</label>
+            <input type="text" name="filter_search" value="{{ filter_search }}" placeholder="{{ entry_search }}" id="input-filter-search" class="form-control" style="min-width:280px;" />
+          </div>
+          <button type="submit" class="btn btn-primary">{{ button_filter }}</button>
+        </form>
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <td class="text-left">{{ column_bind_id }}</td>
+                <td class="text-left">{{ column_customer }}</td>
+                <td class="text-left">{{ column_email }}</td>
+                <td class="text-left">{{ column_method }}</td>
+                <td class="text-left">{{ column_code }}</td>
+                <td class="text-left">{{ column_api_id }}</td>
+              </tr>
+            </thead>
+            <tbody>
+              {% if bindings %}
+              {% for b in bindings %}
+              <tr>
+                <td class="text-left">{{ b.bind_id }}</td>
+                <td class="text-left">{{ b.firstname }} {{ b.lastname }}</td>
+                <td class="text-left">{{ b.email }}</td>
+                <td class="text-left">{{ b.method_name }}</td>
+                <td class="text-left">{{ b.method_code }}</td>
+                <td class="text-left">{{ b.api_id }}</td>
+              </tr>
+              {% endfor %}
+              {% else %}
+              <tr>
+                <td class="text-center" colspan="6">{{ text_no_bindings }}</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-sm-6 text-left">{{ pagination }}</div>
+          <div class="col-sm-6 text-right">{{ results }}</div>
         </div>
       </div>
     </div>
